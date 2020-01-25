@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+		<meta content="utf-8" http-equiv="encoding">
+		<title>Scatterplot Graph</title>
+		<script src="../d3.min.js"></script>
+		<style>
+		</style>
+	</head>
+	<body>
+		<div id="root"></div>
+		<script>
+			d3.json("cyclist-data.json").then(function(dataset){
+				console.dir(dataset);
+				//dimensions of svg canvas
+				const width = 1000;
+				const height = 500;
+
+				//create svg canvas
+				const svg = d3.select("#root")
+				.append("svg")
+				.attr("width", width)
+				.attr("height", height)
+				.attr("style", "background-color: lightgrey;");
+
+			});
+		</script>
+	</body>
+</html>
