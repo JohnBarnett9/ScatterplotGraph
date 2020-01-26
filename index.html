@@ -50,7 +50,13 @@
 				var parsedData = dataset.map(function(d){
 					return d3.timeParse(specifier)(d['Time']);
 				});
-				console.dir(parsedData);
+				//console.log("parsedData=");
+				//console.dir(parsedData);
+				console.log("test");
+				//console.dir(d3.timeParse(specifier)(dataset[0]['Time']));
+				var parseTry = d3.timeFormat("%M:%S");
+				//console.dir(parseTry(dataset[0]['Time']));
+				console.dir(parseTry(parsedData[0])); //works prints 
 
 				//scale x data to fit on chart
 				const xScale = d3.scaleTime()
@@ -100,6 +106,36 @@
 				.attr("y", 0)
 				.attr("transform", "translate(30, 300) rotate(-90)")
 				.text("Time in Minutes");
+
+				//data points
+				svg.selectAll("circle")
+				.data(dataset)
+				.enter()
+				.append("circle")
+				.attr("cx", function(d, i){ 
+					//var temp = d['Year'];
+					//console.dir(temp);
+					//return temp;
+					return xScale(d['Year']) + 10;
+				})
+				.attr("cy", function(d, i){
+					//var tempy = d['Time'];
+					//console.dir(tempy);
+					//return tempy;
+					//return d3.timeParse(specifier)(d['Time']);
+					//return parsedData[i];
+					//return parsedData[i];
+					//return parseTry(parsedData[i])
+					//return yScale(d['Time']);
+					//console.dir(d['Time']); //39:50
+					//console.dir(yScale(parsedData[i]));
+					return yScale(parsedData[i]) - 10;
+				})
+				.attr("r", 6)
+				.attr("fill", function(d){
+					if(d['Doping'] === ""){ return "orange"; }
+					else{ return "blue"; }
+				});
 
 
 
