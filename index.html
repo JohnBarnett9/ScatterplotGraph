@@ -137,7 +137,42 @@
 					else{ return "blue"; }
 				});
 
+				//color legend
+				/**/
+				svg.append("text")
+				.attr("x", 770)
+				.attr("y", 300)
+				.text("No doping allegations");
 
+				svg.append("rect")
+				.attr("x", 970)
+				.attr("y", 290)
+				.attr("width", 10)
+				.attr("height", 10)
+				.attr("fill", "orange");
+
+				svg.append("text")
+				.attr("x", 770)
+				.attr("y", 330)
+				.text("Riders with doping allegations");
+
+				svg.append("rect")
+				.attr("x", 970)
+				.attr("y", 320)
+				.attr("width", 10)
+				.attr("height", 10)
+				.attr("fill", "blue");
+				
+				/*
+				var legend = svg.append("g")
+				.attr("x", 850)
+				.attr("y", 250);
+
+				legend.append("text")
+				//.attr("x", 300)
+				//.attr("y", 300)
+				.text("No doping allegations");
+				*/
 
 
 
