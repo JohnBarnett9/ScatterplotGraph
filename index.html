@@ -12,10 +12,17 @@
 		<div id="root"></div>
 		<script>
 			d3.json("cyclist-data.json").then(function(dataset){
-				console.dir(dataset);
+				//console.dir(dataset);
 				//dimensions of svg canvas
 				const width = 1000;
 				const height = 500;
+
+				console.log("string=");
+				var a = "a";
+				console.dir(a);
+				console.log("int=");
+				var i = 1;
+				console.log(i);
 
 				//create svg canvas
 				const svg = d3.select("#root")
@@ -23,6 +30,29 @@
 				.attr("width", width)
 				.attr("height", height)
 				.attr("style", "background-color: lightgrey;");
+
+				var minYear = d3.min(dataset, (d) => d['Year']);
+				console.dir(minYear);
+				var maxYear = d3.max(dataset, (d) => d['Year']);
+				console.dir(maxYear);
+
+				//scale x data to fin on chart
+				const xScale = d3.scaleTime()
+				.domain([minYear, maxYear])
+				.range([50, width - 50]);
+
+				//position X Axis
+				var xAxis = d3.axisBottom(xScale).tickFormat(d3.format("d"));
+				svg.append("g")
+				.attr("transform", "translate(0,"+(height - 50) +")")
+				.call(xAxis);
+				//.attr("fill", "green");
+				
+				//X Axis Label
+				svg.append("text")
+				.attr("x", width / 2)
+				.attr("y", height - 20)
+				.text("Year");
 
 			});
 		</script>
