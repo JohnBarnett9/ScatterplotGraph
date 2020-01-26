@@ -32,9 +32,11 @@
 				.attr("style", "background-color: lightgrey;");
 
 				//data boundaries X Axis
-				var minYear = d3.min(dataset, (d) => d['Year']);
+				//-1 to have 1 tick mark to left of 1994
+				var minYear = d3.min(dataset, (d) => d['Year']) - 1;
 				console.dir(minYear);
-				var maxYear = d3.max(dataset, (d) => d['Year']);
+				//+1 to have rightmost tick mark be 2016
+				var maxYear = d3.max(dataset, (d) => d['Year']) + 1;
 				console.dir(maxYear);
 
 				//data boundaries Y Axis
@@ -69,7 +71,7 @@
 				//position X Axis
 				var xAxis = d3.axisBottom(xScale).tickFormat(d3.format("d"));
 				svg.append("g")
-				.attr("transform", "translate(0,"+(height - 50) +")")
+				.attr("transform", "translate(30,"+(height - 60) +")")
 				.call(xAxis);
 				//.attr("fill", "green");
 
@@ -84,7 +86,7 @@
 
 				var yAxis = d3.axisLeft(yScale).tickFormat(d3.timeFormat("%M:%S"));
 				svg.append("g")
-				.attr("transform", "translate(50, 0)")
+				.attr("transform", "translate(80, -10)")
 				.call(yAxis);
 				
 				//X Axis Label
