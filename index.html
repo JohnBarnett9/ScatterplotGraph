@@ -31,15 +31,40 @@
 				.attr("height", height)
 				.attr("style", "background-color: lightgrey;");
 
+				//data boundaries X Axis
 				var minYear = d3.min(dataset, (d) => d['Year']);
 				console.dir(minYear);
 				var maxYear = d3.max(dataset, (d) => d['Year']);
 				console.dir(maxYear);
 
-				//scale x data to fin on chart
+				//data boundaries Y Axis
+				var minTime = d3.min(dataset, (d) => d['Time']);
+				console.dir(minTime);
+				var maxTime = d3.max(dataset, (d) => d['Time']);
+				console.dir(maxTime);
+
+				//SO answer
+				var specifier = "%M:%S";
+				var parsedData = dataset.map(function(d){
+					return d3.timeParse(specifier)(d['Time']);
+				});
+				console.dir(parsedData);
+
+				//scale x data to fit on chart
 				const xScale = d3.scaleTime()
 				.domain([minYear, maxYear])
 				.range([50, width - 50]);
+
+				/*
+				//scale y data to fit on chart
+				const yScale = d3.scaleTime()
+				.domain([minTime, maxTime])
+				.range([50, height - 50]);
+				*/
+				const yScale = d3.scaleTime()
+				.domain(d3.extent(parsedData))
+				.range([50, height - 50]);
+
 
 				//position X Axis
 				var xAxis = d3.axisBottom(xScale).tickFormat(d3.format("d"));
@@ -47,12 +72,33 @@
 				.attr("transform", "translate(0,"+(height - 50) +")")
 				.call(xAxis);
 				//.attr("fill", "green");
+
+				//position Y Axis
+				/*
+				var axis = d3.axisLeft(yScale)
+				.tickValues(parsedData)
+				.tickFormat(function(d){
+					return d3.timeFormat(specifier)(d)
+				});
+				*/
+
+				var yAxis = d3.axisLeft(yScale).tickFormat(d3.timeFormat("%M:%S"));
+				svg.append("g")
+				.attr("transform", "translate(50, 0)")
+				.call(yAxis);
 				
 				//X Axis Label
 				svg.append("text")
 				.attr("x", width / 2)
 				.attr("y", height - 20)
 				.text("Year");
+
+				svg.append("text")
+				.attr("x", 100)
+				.attr("y", 100)
+				.text("Time in Minutes");
+
+
 
 			});
 		</script>
