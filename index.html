@@ -113,28 +113,41 @@
 				.enter()
 				.append("circle")
 				.attr("cx", function(d, i){ 
-					//var temp = d['Year'];
-					//console.dir(temp);
-					//return temp;
 					return xScale(d['Year']) + 10;
 				})
 				.attr("cy", function(d, i){
-					//var tempy = d['Time'];
-					//console.dir(tempy);
-					//return tempy;
-					//return d3.timeParse(specifier)(d['Time']);
-					//return parsedData[i];
-					//return parsedData[i];
-					//return parseTry(parsedData[i])
-					//return yScale(d['Time']);
-					//console.dir(d['Time']); //39:50
-					//console.dir(yScale(parsedData[i]));
 					return yScale(parsedData[i]) - 10;
 				})
 				.attr("r", 6)
 				.attr("fill", function(d){
-					if(d['Doping'] === ""){ return "orange"; }
-					else{ return "blue"; }
+					if(d['Doping'] === ""){
+						//return "orange"; 
+						return "#ff993e";
+					}
+					else{ return "#4c92c3"; }
+				})
+				.attr("stroke", "black")
+				.attr("opacity", ".8")
+				.on("mouseover", function(d){
+					console.log("in mouseover");
+					var tooltipDiv = d3.select("#myTooltip");
+					tooltipDiv.transition()
+					.duration(1)
+					.style("opacity", 1);
+
+					var tooltipData = 
+					d['Name'] + ": " + d['Nationality']
+					+ "\nYear:" + d['Year'] + ", Time: " + d['Time'];
+					if (d['Doping'] !== "") {
+						tooltipData = tooltipData + d['Doping'];
+					}
+					tooltipDiv.html(tooltipData);
+				})
+				.on("mouseout", function(d){
+					var tooltipDiv = d3.select("#myTooltip");
+					tooltipDiv.transition()
+					.duration(1)
+					.style("opacity", 1);
 				});
 
 				//color legend
@@ -144,36 +157,48 @@
 				.attr("y", 300)
 				.text("No doping allegations");
 
-				svg.append("rect")
-				.attr("x", 970)
-				.attr("y", 290)
+				svg.append("circle")
+				.attr("cx", 980)
+				.attr("cy", 295)
+				.attr("r", 6)
 				.attr("width", 10)
 				.attr("height", 10)
-				.attr("fill", "orange");
+				.attr("fill", "#ff993e")
+				.attr("stroke", "black")
+				.attr("opacity", ".8");
 
 				svg.append("text")
 				.attr("x", 770)
 				.attr("y", 330)
 				.text("Riders with doping allegations");
 
-				svg.append("rect")
-				.attr("x", 970)
-				.attr("y", 320)
+				svg.append("circle")
+				.attr("cx", 980)
+				.attr("cy", 325)
+				.attr("r", 6)
 				.attr("width", 10)
 				.attr("height", 10)
-				.attr("fill", "blue");
+				.attr("fill", "#4c92c3")
+				.attr("stroke", "black")
+				.attr("opacity", ".8");
 				
-				/*
-				var legend = svg.append("g")
-				.attr("x", 850)
-				.attr("y", 250);
+				//title
+				svg.append("text")
+				.attr("x", 400)
+				.attr("y", 20)
+				.text("Doping in Professional Bicycle Racing")
+				.style("font-size", "20px");
 
-				legend.append("text")
-				//.attr("x", 300)
-				//.attr("y", 300)
-				.text("No doping allegations");
-				*/
+				svg.append("text")
+				.attr("x", 470)
+				.attr("y", 40)
+				.text("35 Fastest times up Alpe d'Huez")
+				.style("font-size", "15px");
 
+				var toolTipDiv = d3.select("body")
+				.append("div")
+				.attr("id", "myTooltip")
+				.style("opacity", 1);
 
 
 			});
