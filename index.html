@@ -45,6 +45,12 @@
 
 				var maxTime = d3.max(dataset, (d) => d['Time']);
 
+				/*
+				parserMS is a function that takes a string as input
+				and outputs a time formatted by teh specifier.
+				parsedData is an array that contains the times of the dataset
+				in specifier format.
+				*/
 				var specifier = "%M:%S";
 				var parserMS = d3.timeParse(specifier);
 				var parsedData = dataset.map(function(d){
@@ -56,7 +62,10 @@
 				.domain([minYear, maxYear])
 				.range([50, width - 50]);
 
-				//scale y data to fit on chart
+				/*
+				scale y data to fit on chart
+				extent() outputs the min and max of an array
+				*/
 				const yScale = d3.scaleTime()
 				.domain(d3.extent(parsedData))
 				.range([50, height - 50]);
@@ -67,7 +76,6 @@
 				svg.append("g")
 				.attr("transform", "translate(30,"+(height - 60) +")")
 				.call(xAxis);
-				//.attr("fill", "green");
 
 				//position Y Axis
 				var yAxis = d3.axisLeft(yScale).tickFormat(d3.timeFormat("%M:%S"));
@@ -81,6 +89,14 @@
 				.attr("y", height - 20)
 				.text("Year");
 
+				/*
+				tricky code, translate() moves the axis and origin
+				x and y: the text starts at 0,0
+				transform:
+					slide text 30 to the right
+					slide text 300 down
+					rotate text counter clockwise around the start of the text
+				*/
 				svg.append("text")
 				.attr("x", 0)
 				.attr("y", 0)
@@ -93,17 +109,23 @@
 				.enter()
 				.append("circle")
 				.attr("cx", function(d, i){ 
+					//transform Year 1994 to a number of pixels
+					//+10 refines position of circles
 					return xScale(d['Year']) + 10;
 				})
 				.attr("cy", function(d, i){
+					//transform "mm:ss" to a number of pixels
+					//-10 refines position of circles
 					return yScale(parsedData[i]) - 10;
 				})
 				.attr("r", 6)
 				.attr("fill", function(d){
 					if(d['Doping'] === ""){
-						return "#ff993e";
+						return "#ff993e"; //orange
 					}
-					else{ return "#4c92c3"; }
+					else{
+						return "#4c92c3"; //blue
+					}
 				})
 				.attr("stroke", "black")
 				.attr("opacity", ".8")
@@ -111,15 +133,18 @@
 					var tooltipDiv = d3.select("#myTooltip");
 					tooltipDiv.transition()
 					.duration(1)
-					.style("opacity", .8);
+					.style("opacity", .8); //semi see through
 
 					var tooltipData = 
 					d['Name'] + ": " + d['Nationality']
 					+ "\nYear:" + d['Year'] + ", Time: " + d['Time'];
 					if (d['Doping'] !== "") {
+						//only add doping description if there is one
+						//<br> not "\n"
 						tooltipData = tooltipData + "<br><br>" + d['Doping'];
 					}
 
+					//tooltip appears next to mouse cursor
 					tooltipDiv.html(tooltipData)
 					.style("left", d3.event.pageX  + "px")
 					.style("top", d3.event.pageY  + "px");
@@ -128,7 +153,7 @@
 					var tooltipDiv = d3.select("#myTooltip");
 					tooltipDiv.transition()
 					.duration(1)
-					.style("opacity", 0);
+					.style("opacity", 0); //initialize tooltip to be hidden
 				});
 
 				//color legend
