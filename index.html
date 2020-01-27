@@ -12,9 +12,39 @@
 		<div id="root"></div>
 		<div
 		style="
-		width: 700px;
+		width: 750px;
 		height: 400px;
 		overflow-y: scroll;">
+			<p>Scatterplot Graph is a D3.js Version 5 application.<br>
+			This project is from <a href="https://www.freecodecamp.org/learn/data-visualization/data-visualization-projects/visualize-data-with-a-scatterplot-graph">FreeCodeCamp Project 2</a><br>
+			<a href="https://github.com/JohnBarnett9/ScatterplotGraph">Source Code</a></p>
+			<h3 id="the-top-few-things-i-learned">The top few things I learned</h3>
+			<h3 id="section">1.</h3>
+			<p>When some of the data is Minutes:Seconds, formatting is needed to be able to convert the data to a number of pixels. Suppose “37:45” is 37 minutes and 45 seconds, this is not a number of pixels. I need the number of pixels to know where on the Y Axis the data goes.<br>
+			This code to do this is:</p>
+			<pre><code>var specifier = "%M:%S";
+			var parserMS = d3.timeParse(specifier);
+			var parsedData = dataset.map(function(d){
+			    return parserMS(d['Time']);
+			});
+			var yAxis = d3.axisLeft(yScale).tickFormat(d3.timeFormat("%M:%S"));
+			.attr("cy", function(d, i){
+			    return yScale(parsedData[i]) - 10;
+			})
+			</code></pre>
+			<h3 id="section-1">2.</h3>
+			<p>The Y Axis label was tricky because I did not know that SVG translate() moves 3 things: the text, the axis, and the origin.<br>
+			The code is:</p>
+			<p>D3 elements are created in an SVG element, which has an origin anchored at the top left at 0,0. When a transform attribute is applied a text element on the SVG canvas, a new current coordinate system is established on that transformed text element along with a new origin.</p>
+			<p><code>.attr(“transform”, “translate(30, 300) rotate(-90)”)</code></p>
+			<p>This moves the text to a new coordinate system where the text is anchored at 0,0 (which is 30,300 on the containing svg’s coordinate system.</p>
+			<h3 id="section-2">3.</h3>
+			<p>The order of values in range() determines if the Y Axis is upside down or not.<br>
+			<code>.range([50, height - 50]);</code>, 39:45 is at the bottom and 37:00 is at the top<br>
+			<code>.range([height - 50, 50]);</code>, 37:00 is at the bottom and 39:45 is at the top</p>
+
+
+
 		</div>
 	</body>
 </html>
