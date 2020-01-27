@@ -1,0 +1,9 @@
+#myTooltip {
+	position: absolute; /*without this, tooltip is below graph*/
+	background-color: white;
+	width: 200px;
+	height: 100px;
+	padding: 3px; /*space between text and border of tooltip*/
+	border-radius: 3px; /*slightly curved corners*/
+	border: 1px solid black;
+}
