@@ -6,23 +6,24 @@
 		<title>Scatterplot Graph</title>
 		<script src="../d3.min.js"></script>
 		<style>
+			#myTooltip {
+				position: absolute;
+				background-color: white;
+				width: 200px;
+				height: 100px;
+				padding: 3px;
+				border-radius: 3px;
+				border: 1px solid black;
+			}
 		</style>
 	</head>
 	<body>
 		<div id="root"></div>
 		<script>
 			d3.json("cyclist-data.json").then(function(dataset){
-				//console.dir(dataset);
 				//dimensions of svg canvas
 				const width = 1000;
 				const height = 500;
-
-				console.log("string=");
-				var a = "a";
-				console.dir(a);
-				console.log("int=");
-				var i = 1;
-				console.log(i);
 
 				//create svg canvas
 				const svg = d3.select("#root")
@@ -34,41 +35,28 @@
 				//data boundaries X Axis
 				//-1 to have 1 tick mark to left of 1994
 				var minYear = d3.min(dataset, (d) => d['Year']) - 1;
-				console.dir(minYear);
+
 				//+1 to have rightmost tick mark be 2016
 				var maxYear = d3.max(dataset, (d) => d['Year']) + 1;
-				console.dir(maxYear);
+
 
 				//data boundaries Y Axis
 				var minTime = d3.min(dataset, (d) => d['Time']);
-				console.dir(minTime);
-				var maxTime = d3.max(dataset, (d) => d['Time']);
-				console.dir(maxTime);
 
-				//SO answer
+				var maxTime = d3.max(dataset, (d) => d['Time']);
+
 				var specifier = "%M:%S";
+				var parserMS = d3.timeParse(specifier);
 				var parsedData = dataset.map(function(d){
-					return d3.timeParse(specifier)(d['Time']);
+					return parserMS(d['Time']);
 				});
-				//console.log("parsedData=");
-				//console.dir(parsedData);
-				console.log("test");
-				//console.dir(d3.timeParse(specifier)(dataset[0]['Time']));
-				var parseTry = d3.timeFormat("%M:%S");
-				//console.dir(parseTry(dataset[0]['Time']));
-				console.dir(parseTry(parsedData[0])); //works prints 
 
 				//scale x data to fit on chart
 				const xScale = d3.scaleTime()
 				.domain([minYear, maxYear])
 				.range([50, width - 50]);
 
-				/*
 				//scale y data to fit on chart
-				const yScale = d3.scaleTime()
-				.domain([minTime, maxTime])
-				.range([50, height - 50]);
-				*/
 				const yScale = d3.scaleTime()
 				.domain(d3.extent(parsedData))
 				.range([50, height - 50]);
@@ -82,14 +70,6 @@
 				//.attr("fill", "green");
 
 				//position Y Axis
-				/*
-				var axis = d3.axisLeft(yScale)
-				.tickValues(parsedData)
-				.tickFormat(function(d){
-					return d3.timeFormat(specifier)(d)
-				});
-				*/
-
 				var yAxis = d3.axisLeft(yScale).tickFormat(d3.timeFormat("%M:%S"));
 				svg.append("g")
 				.attr("transform", "translate(80, -10)")
@@ -121,7 +101,6 @@
 				.attr("r", 6)
 				.attr("fill", function(d){
 					if(d['Doping'] === ""){
-						//return "orange"; 
 						return "#ff993e";
 					}
 					else{ return "#4c92c3"; }
@@ -129,7 +108,6 @@
 				.attr("stroke", "black")
 				.attr("opacity", ".8")
 				.on("mouseover", function(d){
-					console.log("in mouseover");
 					var tooltipDiv = d3.select("#myTooltip");
 					tooltipDiv.transition()
 					.duration(1)
@@ -139,19 +117,21 @@
 					d['Name'] + ": " + d['Nationality']
 					+ "\nYear:" + d['Year'] + ", Time: " + d['Time'];
 					if (d['Doping'] !== "") {
-						tooltipData = tooltipData + d['Doping'];
+						tooltipData = tooltipData + "\n" + d['Doping'];
 					}
-					tooltipDiv.html(tooltipData);
+
+					tooltipDiv.html(tooltipData)
+					.style("left", d3.event.pageX  + "px")
+					.style("top", d3.event.pageY  + "px");
 				})
 				.on("mouseout", function(d){
 					var tooltipDiv = d3.select("#myTooltip");
 					tooltipDiv.transition()
 					.duration(1)
-					.style("opacity", 1);
+					.style("opacity", 0);
 				});
 
 				//color legend
-				/**/
 				svg.append("text")
 				.attr("x", 770)
 				.attr("y", 300)
@@ -195,12 +175,11 @@
 				.text("35 Fastest times up Alpe d'Huez")
 				.style("font-size", "15px");
 
+				//tooltip being defined
 				var toolTipDiv = d3.select("body")
 				.append("div")
 				.attr("id", "myTooltip")
-				.style("opacity", 1);
-
-
+				.style("opacity", 0);
 			});
 		</script>
 	</body>
