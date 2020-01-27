@@ -30,7 +30,7 @@
 				.append("svg")
 				.attr("width", width)
 				.attr("height", height)
-				.attr("style", "background-color: lightgrey;");
+				.attr("style", "background-color: white;");
 
 				//data boundaries X Axis
 				//-1 to have 1 tick mark to left of 1994
@@ -111,13 +111,13 @@
 					var tooltipDiv = d3.select("#myTooltip");
 					tooltipDiv.transition()
 					.duration(1)
-					.style("opacity", 1);
+					.style("opacity", .8);
 
 					var tooltipData = 
 					d['Name'] + ": " + d['Nationality']
 					+ "\nYear:" + d['Year'] + ", Time: " + d['Time'];
 					if (d['Doping'] !== "") {
-						tooltipData = tooltipData + "\n" + d['Doping'];
+						tooltipData = tooltipData + "<br><br>" + d['Doping'];
 					}
 
 					tooltipDiv.html(tooltipData)
