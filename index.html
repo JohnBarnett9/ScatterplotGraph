@@ -22,7 +22,9 @@
 			<h3 id="section">1.</h3>
 			<p>When some of the data is Minutes:Seconds, formatting is needed to be able to convert the data to a number of pixels. Suppose “37:45” is 37 minutes and 45 seconds, this is not a number of pixels. I need the number of pixels to know where on the Y Axis the data goes.<br>
 			This code to do this is:</p>
-			<pre><code>var specifier = "%M:%S";
+			<pre>
+			<code>
+			var specifier = "%M:%S";
 			var parserMS = d3.timeParse(specifier);
 			var parsedData = dataset.map(function(d){
 			    return parserMS(d['Time']);
@@ -31,7 +33,8 @@
 			.attr("cy", function(d, i){
 			    return yScale(parsedData[i]) - 10;
 			})
-			</code></pre>
+			</code>
+			</pre>
 			<h3 id="section-1">2.</h3>
 			<p>The Y Axis label was tricky because I did not know that SVG translate() moves 3 things: the text, the axis, and the origin.<br>
 			The code is:</p>
